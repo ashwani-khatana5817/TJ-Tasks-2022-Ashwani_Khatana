@@ -1,0 +1,12 @@
+import math
+class Solution(object):
+    def findMaxK(self, num):
+        ans=-1
+        for i in range(0,len(num)-1):
+            a=num[i]
+            for j in range(i+1,len(num)):
+                if -a==num[j]:
+                    ans=max(ans, max(a,num[j]))
+                    break
+        return ans      
+        
