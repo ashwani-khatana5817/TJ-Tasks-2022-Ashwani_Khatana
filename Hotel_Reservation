@@ -1,0 +1,470 @@
+#Python Module:Hotel Reservation System
+
+
+import Module1
+import Module2
+import Module3
+import Module4
+import Module5
+import Module6
+import Module7
+
+
+
+while True:
+    print("\t\t******Hotel Reservation System******\n")
+    print("==========================================")
+    print("1. To Add New Record")
+    print("2. To Search a Record")
+    print("3. To Update the Records")
+    print("4. To Delete the Record")
+    print("5. To View All the Record")
+    print("6. To Generate the Report")
+    print("7. Database Setup")
+    print("8. Exit")
+    print("==========================================")
+    choice=int(input("Enter choice between 1 to 8 -------> :"))
+    if choice==1:
+        Module1.AddRecord()
+    elif choice==2:
+        Module2.SearchRecord()
+    elif choice==3:
+        Module3.UpdateRecord()
+    elif choice==4:
+        Module4.DeleteRecord()
+    elif choice==5:
+        Module5.DisplayRecord()
+    elif choice==6:
+        Module6.GenerateReport()
+    elif choice==7:
+        Module7.DataBase()
+    elif choice==8:
+        break
+    else:
+        print("Wrong choice.......Enter your choice again")
+        x=input("Enter any key to continue")
+
+
+
+
+
+#Python Module: Module1
+
+
+from datetime import date,datetime,timedelta
+import mysql.connector
+
+
+
+def AddRecord():
+    try:
+        mydb=mysql.connector.connect(host="localhost",user="root",password="root",database="Hotel")
+        mycursor=mydb.cursor()
+        print("Enter Customer's information......")
+        cust_id=int(input("Enter the Customer ID: "))
+        cust_name=input("Enter the Customer Name: ")
+        address=input("Enter the Address: ")
+        roomno=int(input("Enter the Room Number: "))
+        mobileno=input("Enter the Mobile Number: ")
+        check_in=input("Enter the Check-In Date (YYYY-MM-DD): ")
+        check_out=input("Enter the Check-Out Date (YYYY-MM-DD): ")
+        adv_payment=float(input("Enter the Advance Amount: "))
+        room_type=int(input("Room Type:- \n 1. Suite (Rs. 2000 /day) \n 2. Deluxe (Rs. 1000 /day) \n 3. Standard (Rs. 500 /day)\n"))
+        
+        if room_type==1:
+            room_type="Suite"
+        elif room_type==2:
+            room_type="Deluxe"
+        elif room_type==3:
+            room_type="Standard"
+        else:
+            print("Enter the correct choice")
+        #noofdays=" "
+            
+        sql="insert into CustomerDetail values(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        val=(cust_id,cust_name,address,roomno,mobileno,check_in,check_out,adv_payment,room_type)
+        mycursor.execute(sql,val)
+        mydb.commit()
+        mycursor.close()
+        mydb.close()
+        print("Records Inserted Successfully..........")
+
+    except Exception as ex:
+        print("Something went wrong",ex)
+        
+    mydb.close()
+
+
+
+
+
+
+#Python Module: Module2
+
+
+from datetime import date,datetime,timedelta
+import mysql.connector
+
+def SearchRecord():
+    try:
+        mydb=mysql.connector.connect(host="localhost",user="root",password="root",database="Hotel")
+        mycursor=mydb.cursor()
+        cust_id=int(input("Enter Customer ID to be Searched: "))
+        sql="select * from CustomerDetail where cust_id=%s"
+        val=(cust_id,)
+        mycursor.execute(sql,val)
+         for(cust_id,cust_name,address,roomno,mobileno,check_in,check_out,adv_payment,room_type) in mycursor:
+            print("==============================================")
+            print("==============================================")
+            print("Customer ID: ",cust_id)
+            print("Customer Name: ",cust_name)
+            print("Customer Address: ",address)
+            print("Room Number: ",roomno)
+            print("Mobile Number: ",mobileno)
+            print("Check-In Date: ",check_in)
+            print("Check-Out Date: ",check_out)
+            print("Advance Payment:",adv_payment)
+            print("Room Type:",room_type)
+            print("===============================================")
+        
+        mydb.commit()
+        mycursor.close()
+        mydb.close()
+        print("Record Searched Successfully..........")
+
+    except Exception as ex:
+        print("Something went wrong",ex)
+        
+    mydb.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Python Module: Module3
+
+
+from datetime import date,datetime,timedelta
+import mysql.connector
+
+
+def UpdateRecord():
+    try:
+        mydb=mysql.connector.connect(host="localhost",user="root",password="root",database="Hotel")
+        mycursor=mydb.cursor()
+        cust_id=int(input("Enter Customer ID to be Updated: "))
+        sql="select * from CustomerDetail where cust_id=%s"
+        val=(cust_id,)
+        print("Enter New Record")
+        #cust_id=int(input("Enter the Customer ID: "))
+        cust_name=input("Enter the Customer Name: ")
+        address=input("Enter the Address: ")
+        roomno=int(input("Enter the Room Number: "))
+        mobileno=input("Enter the Mobile Number: ")
+        check_in=input("Enter the Check-In Date (YYYY-MM-DD): ")
+        check_out=input("Enter the Check-Out Date (YYYY-MM-DD): ")
+        adv_payment=float(input("Enter the Advance Amount: "))
+        room_type=int(input("Room Type:- \n 1. Suite (Rs. 2000 /day) \n 2. Delux (Rs. 1000 /day) \n 3. Standard (Rs. 500 /day): "))
+        if room_type==1:
+            room_type="Suite"
+        elif room_type==2:
+            room_type="Deluxe"
+        elif room_type==3:
+            room_type="Standard"
+        else:
+            print("Enter the correct choice")
+
+        sql2="update CustomerDetail set cust_name=%s, address=%s, roomno=%s, mobileno=%s,check_in=%s,check_out=%s,adv_payment=%s,room_type=%s where cust_id=%s"
+        val2=(cust_name,address,roomno,mobileno,check_in,check_out,adv_payment,room_type,cust_id)
+        mycursor.execute(sql2,val2)
+        mydb.commit()
+        mycursor.close()
+        mydb.close()
+        print("Records Updated Successfully..........")
+
+    except Exception as ex:
+        print("Something went wrong",ex)
+        
+    mydb.close()
+
+
+
+
+#Python Module: Module4
+
+
+from datetime import date,datetime,timedelta
+import mysql.connector
+
+
+
+def DeleteRecord():
+    try:
+        mydb=mysql.connector.connect(host="localhost",user="root",password="root",database="Hotel")
+        mycursor=mydb.cursor()
+        cust_id=int(input("Enter Customer ID to be Deleted: "))
+        sql="delete from CustomerDetail where cust_id=%s"
+        val=(cust_id,)
+        mycursor.execute(sql,val)
+        mydb.commit()
+        mycursor.close()
+        mydb.close()
+        print("Records Deleted Successfully..........")
+
+    except Exception as ex:
+        print("Something went wrong",ex)
+        
+    mydb.close()
+
+#Python Module: Module5
+
+
+from datetime import date,datetime,timedelta
+import mysql.connector
+
+
+
+
+def DisplayRecord():
+    try:
+        mydb=mysql.connector.connect(host="localhost",user="root",password="root",database="Hotel")
+        mycursor=mydb.cursor()
+        sql="select * from CustomerDetail"
+        mycursor.execute(sql)
+        for(cust_id,cust_name,address,roomno,mobileno,check_in,check_out,adv_payment,room_type) in mycursor:
+            print("==============================================")
+            print("Customer ID: ",cust_id)
+            print("Customer Name: ",cust_name)
+            print("Customer Address: ",address)
+            print("Room Number: ",roomno)
+            print("Mobile Number: ",mobileno)
+            print("Check-In Date: ",check_in)
+            print("Check-Out Date: ",check_out)
+            print("Advance Payment:",adv_payment)
+            print("Room Type:",room_type)
+            print("===============================================")
+        
+        mydb.commit()
+        mycursor.close()
+        mydb.close()
+
+    except Exception as ex:
+        print("Something went wrong",ex)
+        
+    mydb.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Python Module: Module6
+
+from datetime import date
+import datetime
+import mysql.connector
+
+def GenerateReport():
+    try:
+        mydb=mysql.connector.connect(host="localhost",user="root",password="root",database="Hotel")
+        mycursor=mydb.cursor()
+        Tax=0.0
+        cust_id=int(input("Enter the Customer ID: "))
+        sql="select * from CustomerDetail where cust_id=%s"
+        
+        now=datetime.datetime.now()
+        print("\n************THE TAJ HOTEL************\n")
+
+        print("Current Date and Time: ",end=" ")
+        print(now.strftime("%y-%m-%d %H:%M:%S"))
+        val=(cust_id,)
+
+        mycursor.execute(sql,val)
+     for(cust_id,cust_name,address,roomno,mobileno,check_in,check_out,adv_payment,room_type) in mycursor:
+            print("==============================================")
+            print("==============================================")
+            print("Customer ID: ",cust_id)
+            print("Customer Name: ",cust_name)
+            print("Customer Address: ",address)
+            print("Room Number: ",roomno)
+            print("Mobile Number: ",mobileno)
+            print("Check-In Date: ",check_in)
+            print("Check-Out Date: ",check_out)
+            print("Advance Payment:",adv_payment)
+            print("Room Type:",room_type)
+
+            print("===============================================")
+        print("check-in= ",check_in)
+        print("check-out= ",check_out)
+
+        ndays=check_out-check_in
+        nofdays=ndays.days
+        print("No of days= ",nofdays)
+        print("===============================================")
+
+        print("Hotel The Taj")
+        print("500, North Extension")
+        print("New Delhi")
+        print("===============================================")
+        print("Customer ID: ",cust_id)
+        print("Customer Name: ",cust_name)
+        print("Customer Address: ",address)
+
+        print("===============================================")
+        print("Room Number: ",roomno)
+        print("Mobile Number: ",mobileno)
+
+        print("===============================================")
+        print("Check-In: ",check_in)
+        print("Check-Out: ",check_out)
+        print("Room Type: ",room_type)
+        print("===============================================")
+
+        print("Number of Days: ",ndays)
+
+        if room_type=="Suite":
+            price=2000
+        elif room_type=="Deluxe":
+            price=1000
+        else:
+            price=500
+
+        Total=nofdays*price
+        print("Total: ",Total)
+
+        print("Advance: ",adv_payment)
+        Tax=Total*0.10
+
+        print("Tax: ",Tax)
+        netamt=(float(Total)+float(Tax))-float(adv_payment)
+        
+        print("Net Amount: ",netamt)
+            
+        mydb.commit()
+        mycursor.close()
+        mydb.close()
+        
+
+    except Exception as ex:
+        print("Something went wrong",ex)
+        
+    mydb.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Python Module: Module7
+
+import MyDatabase
+
+def DataBase():
+    while True:
+        print("\t\t*****Database Management*****\n")
+        print("=====================================")
+        print("1. Database Creation")
+        print("2. Creation of Relations")
+        print("3. List of Relations")
+        print("4. Return to Main Menu")
+        print("======================================")
+        choice=int(input("Enter choice between 1 to 4-------->: "))
+        if choice==1:
+            MyDatabase.CreateDatabase()
+        elif choice==2:
+            MyDatabase.CreateRelations()
+        elif choice==3:
+            MyDatabase.ShowRelations()
+        elif choice==4:
+            return
+        else:
+            print("Wrong choice.......Enter your choice again")
+            x=input("Enter any key to continue")
+
+
+
+#Python Module: MyDatabase
+
+
+from datetime import date,datetime,timedelta
+import mysql.connector
+
+
+
+def CreateDatabase():
+       try:
+              
+              mydb=mysql.connector.connect(host="localhost",user="root",password="root")
+              mycursor=mydb.cursor()
+
+              print("Creating Hotel Database")
+
+              sql="create database if not exists Hotel"
+              mycursor.execute(sql)
+
+              print("Hotel Database Created Successfully....")
+              
+       except Exception as ex:
+              print(ex)
+       
+
+
+def CreateRelations():
+       try:
+              
+              mydb=mysql.connector.connect(host="localhost",user="root",password="root",database="Hotel")
+              mycursor=mydb.cursor()
+
+              print("Creating CustomerDetail Relation")
+
+              sql="create table if not exists CustomerDetail(cust_id int primary key, cust_name varchar(50) not null,address varchar(450) not null,roomno int,mobileno char(10),check_in date,check_out date,adv_payment float, room_type varchar(50))"
+
+              mycursor.execute(sql)
+              print("CustomerDetail Relation Created Successfully....")
+
+       except Exception as ex:
+
+              print("Something went wrong",ex)
+
+
+def ShowRelations():
+       try:
+              
+              mydb=mysql.connector.connect(host="localhost",user="root",password="root",database="Hotel")
+              mycursor=mydb.cursor()
+
+              print("Displaying List of Relations")
+
+              sql="show tables"
+              mycursor.execute(sql)
+              for i in mycursor:
+                     print(i)
+               
+       except Exception as ex:
+              print("Something went wrong",ex)
